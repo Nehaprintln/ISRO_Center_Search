@@ -30,3 +30,18 @@ const filterData = data.filter(data => {
 filterData.forEach(displayData => {
     
 })
+
+async function fetchData(){
+    try{
+        const response = await fetch('https://isro.vercel.app/api/centres');
+        const result = await response.json();
+
+        console.log(result);
+        return result;
+    }
+    catch(error){
+        console.log(error);
+    }
+};
+
+const getFetchData = fetchData();
