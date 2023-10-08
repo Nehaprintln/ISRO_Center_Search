@@ -1,6 +1,6 @@
 const searchInput = document.querySelector('.search_input');
 const searchIcon = document.querySelector('.search_icon');
-const displayDetails = document.querySelector('.display_details');
+const displayDetails = document.querySelector('.display_all_data');
 
 const radioBtns = document.querySelectorAll('input[name="location"]');
 // ==== select radio value  ====
@@ -14,34 +14,58 @@ radioBtns.forEach(radioBtn => {
     radioBtn.addEventListener('change', findSelecting)
 });
 
-//  ===  get input text ===
-var input;
-searchIcon.addEventListener('click', ()=>{
-    input = searchInput.value.trim();
-    console.log(input);
-    searchInput.value = '';
-});
-
-// ===  get data from link ===
-const filterData = data.filter(data => {
-    return data[selectedLocation].includes(input);
-});
-
-filterData.forEach(displayData => {
-    
-})
-
+let centres;
+const tableBody = document.querySelector('#tbody');
 async function fetchData(){
     try{
         const response = await fetch('https://isro.vercel.app/api/centres');
         const result = await response.json();
 
         console.log(result);
-        return result;
+        centres = result.centres;
+        centres.forEach(center => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+            <td>${center.name}</td>
+            <td>${center.Place}</td>
+            <td>${center.State}</td>
+            `;
+            tableBody.appendChild(row);
+        })
+        
     }
     catch(error){
         console.log(error);
     }
 };
+fetchData();
 
-const getFetchData = fetchData();
+
+//  ===  get input text ===
+
+var input;
+searchIcon.addEventListener('click', ()=>{
+    input = searchInput.value.trim();
+    tableBody.innerHTML = "";
+    // console.log(input);
+    let filteredData = centres.filter(center => center[selectedLocation] == input);
+    displayDataOnTable(filteredData);
+    searchInput.value = '';
+});
+
+function displayDataOnTable(filteredData){
+    filteredData.forEach(center => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+        <td>${center.name}</td>
+        <td>${center.Place}</td>
+        <td>${center.State}</td>
+        `;
+        tableBody.appendChild(row);
+    })
+}
+
+
+
+
+
