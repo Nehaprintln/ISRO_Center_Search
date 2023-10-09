@@ -48,9 +48,13 @@ searchIcon.addEventListener('click', ()=>{
     input = searchInput.value.trim();
     tableBody.innerHTML = "";
     // console.log(input);
+    if(selectedLocation){
     let filteredData = centres.filter(center => center[selectedLocation] == input);
     displayDataOnTable(filteredData);
     searchInput.value = '';
+    }else{
+        searchInput.value = 'Select valid option';
+    }
 });
 
 function displayDataOnTable(filteredData){
